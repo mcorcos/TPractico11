@@ -14,25 +14,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-void bitSet (const ports_t* pPorts);
-/*
- * 
- */
-int main(void) {
+#include "registros.h"
+
+int main (void){
     
-    typedef union{
-        uint16_t    d;
-        struct{
-            uint8_t a;
-            uint8_t b;
-        };
-    }ports_t;
-    
-    ports_t *pPorts;
-    return (EXIT_SUCCESS);
+    registros_t reg;
+    return 0;
 }
 
-void bitSet (const ports_t* pPorts){
+void bitSet (char port,char bit){
     
-   
+    (reg.px.port)
+    
 }
