@@ -17,12 +17,14 @@
 #include "registros.h"
 #define Is_portA(i)  (((i)==a)||((i)=A))
 #define Is_portA(i)  (((i)==b)||((i)=B))
-
+#define numvalido(i)    ((i)>=0 && (i)<=7)
 static registros_t portd;
 
-void bitSet (char port, int nb){     //p es un puntero a una estructura, bn es el numero de bits//
-    if (Is_portA(i)){
-        
+void bitSet (char port, int nb){//p es un puntero a una estructura, bn es el numero de bits//
+    int a; //variable aux que me permite agarrar el bit necesario//
+    if (Is_portA(port) && numvalido(nb)){
+        for (a=0 ; a==nb; a++)
+            
     }
     
     
