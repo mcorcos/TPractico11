@@ -39,9 +39,6 @@ typedef struct{  //registro D (reg A + reg B)
         uint8_t b5 :1;
         uint8_t b6 :1;
         uint8_t b7 :1;
-        
-        
-
     }bit;
     typedef union{  //creo la union para poder trabajar a nivel bit(bi), a nivel byte(px)(registro A o B)
         portd_t pd;  //o 2 bytes(pd)(registro D)
