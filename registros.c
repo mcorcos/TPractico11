@@ -144,6 +144,9 @@ void MaskOn (int Mask,char port){   //funcion que me prende los bit que estan pr
 
 void MaskOff (int Mask, char port ){ //debe apagar los bit que estan prendidos en la mascara, respetando a los bits restantes
     if (Is_portA(port)){
-        portd.px.a=(portd.px.a )
+        portd.px.a=(portd.px.a ^ Mask); //mascara con el operador xor
+    }
+    else if (Is_portB(port)){
+    portd.px.b= (portd.px.b ^ Mask);    
     }
 }
