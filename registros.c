@@ -135,15 +135,23 @@ void bitToggle (char port, int numbit){ //funcion que utiliza otra funciones , p
 
 void MaskOn (int Mask,char port){   //funcion que me prende los bit que estan prendidos en la mascara, respetandos el estado de los bit del puerto 
     if (Is_portA(port)){            //se tiene que tener en cuenta que Mask tiene que ser un numero en hexa, para mejor funcionamiento
-        portd.px.a=(portd.px.a & Mask); 
+        portd.px.a=(portd.px.a | Mask); 
     }
     else if (Is_portB(port)){
-        portd.px.b=(portd.px.b & Mask);
+        portd.px.b=(portd.px.b | Mask);
     }
 }
 
 void MaskOff (int Mask, char port ){ //debe apagar los bit que estan prendidos en la mascara, respetando a los bits restantes
     if (Is_portA(port)){
+        portd.px.a=(portd.px.a & Mask); //mascara con el operador xor
+    }
+    else if (Is_portB(port)){
+    portd.px.b= (portd.px.b & Mask);    
+    }
+}
+void MaskToggle (int Mask, char port ){
+     if (Is_portA(port)){
         portd.px.a=(portd.px.a ^ Mask); //mascara con el operador xor
     }
     else if (Is_portB(port)){

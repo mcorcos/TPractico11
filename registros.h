@@ -14,6 +14,13 @@
 #ifndef REGISTROS_H
 #define REGISTROS_H
 
+void bitSet (char ,int);
+void bitClr (char ,int);
+int bitGet (char , int);
+void bitToggle (char ,int);
+void MaskOn (char ,int);
+void MaskOff (char ,int);
+void MaskToggle (char ,int);
 
 typedef struct{  //registro D (reg A + reg B) 
         uint16_t d;    
