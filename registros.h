@@ -18,9 +18,9 @@ void bitSet (char ,int);
 void bitClr (char ,int);
 int bitGet (char , int);
 void bitToggle (char ,int);
-void MaskOn (char ,int);
-void MaskOff (char ,int);
-void MaskToggle (char ,int);
+void MaskOn (int ,char);
+void MaskOff (int ,char);
+void MaskToggle (int ,char);
 
 typedef struct{  //registro D (reg A + reg B) 
         uint16_t d;    

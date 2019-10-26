@@ -15,9 +15,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "registros.h"
-#define Is_portA(i)  (((i)==a)||((i)=A))    //macros que sirven para validar los datos
-#define Is_portB(i)  (((i)==b)||((i)=B))    
-#define numvalido(i)    ((i)>=0 && (i)<=7)  
+#define Is_portA(i)  (((i)=='a')||((i)='A'))    //macros que sirven para validar los datos
+#define Is_portB(i)  (((i)=='b')||((i)='B'))    
+#define numvalido(i)    ((i)>='0' && (i)<='7')  
 static registros_t portd;                   //se crea una variable de tipo registro_t que a su vez es una estructura
 
 
