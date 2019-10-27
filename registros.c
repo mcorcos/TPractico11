@@ -24,27 +24,27 @@ static registros_t portd;                   //se crea una variable de tipo regis
 void bitSet (char port, int numbit){            //funcion que modifica un bits por 1,recibe un puerto y el numero de bit deseado
     if (Is_portA(port) && numvalido(numbit)){      //se diferencia entre el puerto A y el puerto B,para tener facilel acceso
             switch (numbit){
-                case 0:portd.bi.a0=1;break;
-                case 1:portd.bi.a1=1;break;
-                case 2:portd.bi.a2=1;break;
-                case 3:portd.bi.a3=1;break;
-                case 4:portd.bi.a4=1;break;
-                case 5:portd.bi.a5=1;break;
-                case 6:portd.bi.a6=1;break;
-                case 7:portd.bi.a7=1;break;
+                case '0':portd.bi.a0=1;break;
+                case '1':portd.bi.a1=1;break;
+                case '2':portd.bi.a2=1;break;
+                case '3':portd.bi.a3=1;break;
+                case '4':portd.bi.a4=1;break;
+                case '5':portd.bi.a5=1;break;
+                case '6':portd.bi.a6=1;break;
+                case '7':portd.bi.a7=1;break;
             }
         }
             
     else if (Is_portB(port)&& numvalido(numbit)){
          switch (numbit){
-                case 0:portd.bi.b0=1;break;
-                case 1:portd.bi.b1=1;break;
-                case 2:portd.bi.b2=1;break;
-                case 3:portd.bi.b3=1;break;
-                case 4:portd.bi.b4=1;break;
-                case 5:portd.bi.b5=1;break;
-                case 6:portd.bi.b6=1;break;
-                case 7:portd.bi.b7=1;break;
+                case '0':portd.bi.b0=1;break;
+                case '1':portd.bi.b1=1;break;
+                case '2':portd.bi.b2=1;break;
+                case '3':portd.bi.b3=1;break;
+                case '4':portd.bi.b4=1;break;
+                case '5':portd.bi.b5=1;break;
+                case '6':portd.bi.b6=1;break;
+                case '7':portd.bi.b7=1;break;
         }
      }   
 }
@@ -52,27 +52,27 @@ void bitSet (char port, int numbit){            //funcion que modifica un bits p
 void bitClr (char port,int numbit){             //funcion que modifica un bit por un cero, recibe el puerto y el numero deseado de bit
     if (Is_portA(port) && numvalido(numbit)){      //se diferencia entre el puerto A y el puerto B,para tener facilel acceso
             switch (numbit){
-                case 0:portd.bi.a0=0;break;
-                case 1:portd.bi.a1=0;break;
-                case 2:portd.bi.a2=0;break;
-                case 3:portd.bi.a3=0;break;
-                case 4:portd.bi.a4=0;break;
-                case 5:portd.bi.a5=0;break;
-                case 6:portd.bi.a6=0;break;
-                case 7:portd.bi.a7=0;break;
+                case '0':portd.bi.a0=0;break;
+                case '1':portd.bi.a1=0;break;
+                case '2':portd.bi.a2=0;break;
+                case '3':portd.bi.a3=0;break;
+                case '4':portd.bi.a4=0;break;
+                case '5':portd.bi.a5=0;break;
+                case '6':portd.bi.a6=0;break;
+                case '7':portd.bi.a7=0;break;
             }
         }
             
     else if (Is_portB(port)&& numvalido(numbit)){
          switch (numbit){
-                case 0:portd.bi.b0=0;break;
-                case 1:portd.bi.b1=0;break;
-                case 2:portd.bi.b2=0;break;
-                case 3:portd.bi.b3=0;break;
-                case 4:portd.bi.b4=0;break;
-                case 5:portd.bi.b5=0;break;
-                case 6:portd.bi.b6=0;break;
-                case 7:portd.bi.b7=0;break;
+                case '0':portd.bi.b0=0;break;
+                case '1':portd.bi.b1=0;break;
+                case '2':portd.bi.b2=0;break;
+                case '3':portd.bi.b3=0;break;
+                case '4':portd.bi.b4=0;break;
+                case '5':portd.bi.b5=0;break;
+                case '6':portd.bi.b6=0;break;
+                case '7':portd.bi.b7=0;break;
         }
      }   
 }
@@ -80,21 +80,21 @@ int bitGet (char port,int numbit){                  //funcion que devuelve el es
     int state;
     if (Is_portA(port) && numvalido(numbit)){      //se diferencia entre el puerto A y el puerto B,para tener facilel acceso
             switch (numbit){                        //se devuelve el esatdo del bit deseado
-                case 0:portd.bi.a0=state;
+                case '0':portd.bi.a0=state;
                        return state;break;
-                case 1:portd.bi.a1=state;
+                case '1':portd.bi.a1=state;
                        return state;break;
-                case 2:portd.bi.a2=state;
+                case '2':portd.bi.a2=state;
                        return state;break;
-                case 3:portd.bi.a3=state;                        
+                case '3':portd.bi.a3=state;                        
                        return state;break;
-                case 4:portd.bi.a4=state;                 
+                case '4':portd.bi.a4=state;                 
                        return state;break;
-                case 5:portd.bi.a5=state;
+                case '5':portd.bi.a5=state;
                        return state;break;
-                case 6:portd.bi.a6=state;
+                case '6':portd.bi.a6=state;
                        return state;break;
-                case 7:portd.bi.a7=state;
+                case '7':portd.bi.a7=state;
                        return state;break;
 
             }
@@ -102,21 +102,21 @@ int bitGet (char port,int numbit){                  //funcion que devuelve el es
             
     else if (Is_portB(port)&& numvalido(numbit)){
          switch (numbit){
-                case 0:portd.bi.b0=state;
+                case '0':portd.bi.b0=state;
                        return state;break;
-                case 1:portd.bi.b1=state;
+                case '1':portd.bi.b1=state;
                        return state;break;
-                case 2:portd.bi.b2=state;
+                case '2':portd.bi.b2=state;
                        return state;break;
-                case 3:portd.bi.b3=state;
+                case '3':portd.bi.b3=state;
                        return state;break;
-                case 4:portd.bi.b4=state;
+                case '4':portd.bi.b4=state;
                        return state;break;
-                case 5:portd.bi.b5=state;
+                case '5':portd.bi.b5=state;
                        return state;break;
-                case 6:portd.bi.b6=state;
+                case '6':portd.bi.b6=state;
                        return state;break;
-                case 7:portd.bi.b7=state;
+                case '7':portd.bi.b7=state;
                        return state;break;
         }
      }  

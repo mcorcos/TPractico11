@@ -10,7 +10,7 @@
  *
  * Created on 21 de octubre de 2019, 18:21
  */
-
+#include <stdint.h>
 #ifndef REGISTROS_H
 #define REGISTROS_H
 
