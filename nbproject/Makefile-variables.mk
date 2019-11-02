@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
-CND_ARTIFACT_NAME_Debug=tp10-ejer4_2_
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/tp10-ejer4_2_
+CND_ARTIFACT_NAME_Debug=tpractico11
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/tpractico11
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
-CND_PACKAGE_NAME_Debug=tp10-ejer4(2).tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/tp10-ejer4(2).tar
+CND_PACKAGE_NAME_Debug=tpractico11.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/tpractico11.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
-CND_ARTIFACT_NAME_Release=tp10-ejer4_2_
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/tp10-ejer4_2_
+CND_ARTIFACT_NAME_Release=tpractico11
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/tpractico11
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
-CND_PACKAGE_NAME_Release=tp10-ejer4(2).tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/tp10-ejer4(2).tar
+CND_PACKAGE_NAME_Release=tpractico11.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/tpractico11.tar
 #
 # include compiler specific variables
 #

@@ -13,6 +13,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 #include "registros.h"
 
 #define ltrT(i) ((i)=='t' || (i)=='T')  //cambia todos los bits del puerto por el opuesto
@@ -26,6 +28,30 @@
  * 
  */
 int main() {
+    ALLEGRO_DISPLAY  *display=NULL;
+    ALLEGRO_BITMAP *imagen=NULL;
+    if (!al_init()){        //inicializacion general del allegro
+        fprintf (stderr, "error al inicializar el allegro\n");
+        return 0;
+    }
+    if (!al_init_image_addon()){
+        fprintf (stderr, "error al inicializar la imagen\n");
+        return 0;
+    }
+    imagen=al_load_bitmap("leds.png");        //se carga la imagen, si se inicializa correctamente ocupa memoria dinamica
+    if (!imagen){
+        fprintf(stderr, "error al cargar la imagen");
+        return 0; 
+    }
+    display=al_create_display(800,500);
+    if(!display){
+        al_destroy_bitmap(imagen);      //se destruye la imagen porque ocupa espacio en heap y el programa fallo por otro motivo
+        fprintf(stderr,"error al crear el bitmap");
+        return 0;
+    }
+    al_draw_bitmap(imagen,0,0,0);
+    al_flip_display();
+    
     int entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
     extern registros_t *puertos;
     char portA='A';     //solo se desea modificar el puerto A
@@ -34,25 +60,27 @@ int main() {
         entrada=getchar ();
         if (numvalido(entrada)) {   //usar macro de libreria
             bitSet(portA, entrada);
-            printf (" El valor del puerto A es: 0x%x\n", (*puertos).px.a);
+            printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
         }
         else if (ltrT(entrada)){
             MaskToggle(MaskT,portA);
-            printf (" El valor del puerto A es: 0x%x\n", (*puertos).px.a);
+            printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
         }
         else if (ltrC(entrada)){
             MaskOff(MaskC,portA);
-            printf (" El valor del puerto A es: 0x%x\n", (*puertos).px.a);
+            printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
         }
         else if (ltrS(entrada)){
             MaskOn(MaskT,portA);
-            printf (" el valor del puerto A es: 0x%x\n", (*puertos).px.a);
+            printf (" el valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
         }
         else if (ltrQ(entrada)){
             loop=0;
         }
         
     }while(loop);
+    al_destroy_bitmap(imagen);
+    al_destroy_display(display);
     printf ("bye\n");
     return (EXIT_SUCCESS);
 }
