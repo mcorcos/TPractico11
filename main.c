@@ -53,18 +53,18 @@ int main() {
         fprintf(stderr,"failed to create display");
         return 0;
     }
-    al_map_rgb_f(255,255,255);
+    al_clear_to_color(al_color_name("white"));
     al_flip_display();
-    al_map_rgb_f(255,255,255);
+    al_clear_to_color(al_color_name("white"));
     
-    create_porta();
-    
-    
+    create_portax();
     
     
+    al_rest(15.0);
     
     
-    int entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
+    
+   /* int entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
     extern registros_t *puertos;
     char portA='A';     //solo se desea modificar el puerto A
     printf ("Ingrese numero de bit o letra correspondiente\n");
@@ -90,7 +90,7 @@ int main() {
             loop=0;
         }
         
-    }while(loop);
+    }while(loop);*/
     al_destroy_bitmap(imagen);
     al_destroy_display(display);
     al_shutdown_primitives_addon();
