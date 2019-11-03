@@ -159,3 +159,10 @@ void MaskToggle (int Mask, char port ){
     portd.px.b= (portd.px.b ^ Mask);    
     }
 }
+void MaskParpOff (int portaux, int Mask){
+    portd.px.a=(portaux & Mask);
+}
+void MaskParpOn(int Mask , int portaux){
+    
+    portd.px.a=(Mask | portaux);
+}

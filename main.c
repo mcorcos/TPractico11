@@ -27,35 +27,37 @@
 #define ltrQ(i) ((i)=='q' || (i)=='Q')  //letra q me permite salir del programa
 #define ltrC(i) ((i)=='c' || (i)=='C')  //letra c me permite apagar todos los bits
 #define ltrS(i) ((i)=='s' || (i)=='S')  //letra s me permite prender todos los bits
+#define ltrB(i) ((i)=='b' || (i)=='B') //parpadeo de bits encendidos 
 #define numvalido(i)    ((i)>='0' && (i)<='7')
 #define MaskT      0xFF//mascara que sirve para manipular los bits del puerto A
 #define MaskC      0x00
  extern registros_t *puertos;
-void create_portax(void);
+void create_portax(void);       //puerto A 
 /*
  * 
  */
 int main() {
-    ALLEGRO_DISPLAY  *display=NULL;
+    ALLEGRO_DISPLAY  *display=NULL;     //puntero que apunta a un estructura de allegro, se lo apunta al nulo para controlar errores
     ALLEGRO_BITMAP *imagen=NULL;
     ALLEGRO_EVENT_QUEUE * event_queue =NULL;
+    int portAux;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
     bool close_display = false; 
     
     if (!al_init()){        //inicializacion general del allegro
         fprintf (stderr, "error al inicializar el allegro\n");
         return 0;
     }
-   event_queue = al_create_event_queue(); 
-    if (!event_queue) {
+   event_queue = al_create_event_queue();       //se inicializa los eventos
+    if (!event_queue) {                         //se controla si fallo
         fprintf(stderr, "failed to create event_queue!\n");
         return -1;
     }
-    if (!al_init_primitives_addon()){
+    if (!al_init_primitives_addon()){       //se controla si fallo la inicializacion de las primitivas
         fprintf (stderr, "error al inicializar las primitivas\n");
         return 0;
     }
 
-    display=al_create_display(800,500);
+    display=al_create_display(800,500);       //se crear el display
     al_register_event_source(event_queue, al_get_display_event_source(display));
     
     if(!display){
@@ -65,13 +67,13 @@ int main() {
         
         return 0;
     }
-    al_clear_to_color(al_color_name("white"));
+    al_clear_to_color(al_color_name("white"));          //se pinta las dos caras del display con blanco
     al_flip_display();
     al_clear_to_color(al_color_name("white"));
     
-    create_portax();
+    create_portax();                                    //se crea el puerto A 
     
-    while (!close_display) {
+    while (!close_display) {                            
         
         int entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
     
@@ -94,7 +96,7 @@ int main() {
             
             
             
-            if (numvalido(entrada)) {   //usar macro de libreria
+            if (numvalido(entrada)) {   
             
                  bitSet(portA, entrada);
             
@@ -119,7 +121,19 @@ int main() {
             
                 loop=0;
                 close_display=true;
-        }
+           }
+            else if (ltrB(entrada)){
+                portAux=((*puertos).px.a);      //se guarda los bits del puerto A
+                int fin=1;
+                do{                             //ciclo  que me hace parpadaer lso bits
+                    MaskParpOff (portAux,MaskC);
+                    fillbits();
+                    al_flip_display();
+                    MaskParpOn (MaskC,portAux);
+                    fillbits();
+                    al_flip_display();
+                }while(fin);
+            }
             
         fillbits(); //Funcion que actualiza bits del display
         al_flip_display();
@@ -138,7 +152,7 @@ int main() {
     
     
     
-       al_destroy_bitmap(imagen);
+       al_destroy_bitmap(imagen);       //se libera la memoria dinamica , destruyendo los elemntos usados
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
     al_shutdown_primitives_addon();
@@ -148,7 +162,7 @@ int main() {
     return (EXIT_SUCCESS);
 }
 
-void create_portax(void){
+void create_portax(void){           //se crea el grafico del puerto A(los 8flags)
     
     
         al_draw_circle( WIDTH*1/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
@@ -163,7 +177,7 @@ void create_portax(void){
         al_flip_display();
 }
 
-void fillbits(void){
+void fillbits(void){        //controla el esatdo de los bits
     
     
     
@@ -172,7 +186,7 @@ void fillbits(void){
     for(i=0;i<=7;++i){
         
     
-        switch(i){
+        switch(i){      //pregunta bit por bit 
             case 7 :state=(((*puertos).px.a) & 0x01);
                ;break;
             case 6 :state=(((*puertos).px.a) & 0x02);
@@ -191,11 +205,11 @@ void fillbits(void){
                 break;
         }
     
-        if (state){
+        if (state){     //si esta encendido lo pinta de rojo
             al_draw_filled_circle(WIDTH *(i+1)/9 , HEIGHT /2 , 40.0, al_color_name("red"));
       
         }
-        else{
+        else{   //de lo contrario lo deja blanco
             al_draw_filled_circle(WIDTH *(i+1)/9 , HEIGHT /2 , 40.0, al_color_name("white"));
         }
     }   

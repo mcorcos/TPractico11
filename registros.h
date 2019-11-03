@@ -21,6 +21,9 @@ void bitToggle (char ,int);
 void MaskOn (int ,char);
 void MaskOff (int ,char);
 void MaskToggle (int ,char);
+void fillbits (void);
+void MaskParpOn (int,int);
+void MaskParpOff (int,int);
 
 typedef struct{  //registro D (reg A + reg B) 
         uint16_t d;    
