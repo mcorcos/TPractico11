@@ -99,7 +99,7 @@ int main() {
                     if(getchar()=='\n'){
                         cntinue=0;
                         loop=0;
-                        close_display=1;
+                        close_display=true;
                     }
                 }
                 printf("caracter no valido\n");
