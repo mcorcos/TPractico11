@@ -30,7 +30,7 @@
 #define numvalido(i)    ((i)>='0' && (i)<='7')
 #define MaskT      0xFF//mascara que sirve para manipular los bits del puerto A
 #define MaskC      0x00
-
+ extern registros_t *puertos;
 void create_portax(void);
 /*
  * 
@@ -84,13 +84,17 @@ int main() {
         }
     
     
-        extern registros_t *puertos;
+       
         char portA='A';     //solo se desea modificar el puerto A
         printf ("Ingrese numero de bit o letra correspondiente\n");
         
         do{
-             entrada=getchar ();
-             if (numvalido(entrada)) {   //usar macro de libreria
+            
+            entrada=getchar ();
+            
+            
+            
+            if (numvalido(entrada)) {   //usar macro de libreria
             
                  bitSet(portA, entrada);
             
@@ -116,7 +120,7 @@ int main() {
                 loop=0;
                 close_display=true;
         }
-       
+            
         fillbits(); //Funcion que actualiza bits del display
         al_flip_display();
         
@@ -169,21 +173,21 @@ void fillbits(void){
         
     
         switch(i){
-            case 0 :state=bitGet('a',0);
+            case 7 :state=(((*puertos).px.a) & 0x01);
                ;break;
-            case 1 :state=bitGet('a',1);
+            case 6 :state=(((*puertos).px.a) & 0x02);
                 ;break;
-            case 2 :state=bitGet('a',2);
+            case 5 :state=(((*puertos).px.a) & 0x04);
                 ;break;
-            case 3 :state= bitGet('a',3);                     
+            case 4 :state= (((*puertos).px.a) & 0x8);                     
                 break;
-            case 4 :state=  bitGet('a',4);              
+            case 3 :state= (((*puertos).px.a) & 0x10) ;              
                 break;
-            case 5 :state=bitGet('a',5);
+            case 2 :state=(((*puertos).px.a) & 0x20);
                 break;
-            case 6 :state=bitGet('a',6);
+            case 1 :state=(((*puertos).px.a) & 0x40);
                 break;
-            case 7 :state=bitGet('a',7);
+            case 0 :state=(((*puertos).px.a) & 0x80);
                 break;
         }
     
@@ -191,6 +195,8 @@ void fillbits(void){
             al_draw_filled_circle(WIDTH *(i+1)/9 , HEIGHT /2 , 40.0, al_color_name("red"));
       
         }
-    
+        else{
+            al_draw_filled_circle(WIDTH *(i+1)/9 , HEIGHT /2 , 40.0, al_color_name("white"));
+        }
     }   
 }
