@@ -40,7 +40,7 @@ int main() {
     ALLEGRO_DISPLAY  *display=NULL;     //puntero que apunta a un estructura de allegro, se lo apunta al nulo para controlar errores
     ALLEGRO_BITMAP *imagen=NULL;
     ALLEGRO_EVENT_QUEUE * event_queue =NULL;
-    int portAux;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
+    int portAux,cntinue;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
     bool close_display = false; 
     
     if (!al_init()){        //inicializacion general del allegro
@@ -94,49 +94,58 @@ int main() {
             
             entrada=getchar ();
             
-            
-            
-            if (numvalido(entrada)) {   
-            
-                 bitSet(portA, entrada);
-            
-                  printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
+            if(getchar()!='\n'){
+                for(;cntinue;){
+                    if(getchar()=='\n'){
+                        cntinue=0;
+                        close_display=true;
+                    }
+                }
+                printf("caracter no valido\n2");
             }
-             else if (ltrT(entrada)){
-                
-                 MaskToggle(MaskT,portA);
-                 printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
-             }
-             else if (ltrC(entrada)){
-              
-                 MaskOff(MaskC,portA);
-                 printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
-            }
-             else if (ltrS(entrada)){
+            else
+                if (numvalido(entrada)) {   
+
+                     bitSet(portA, entrada);
+
+                      printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
+                }
+                 else if (ltrT(entrada)){
+
+                     MaskToggle(MaskT,portA);
+                     printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
+                 }
+                 else if (ltrC(entrada)){
+
+                     MaskOff(MaskC,portA);
+                     printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
+                }
+                 else if (ltrS(entrada)){
+
+                     MaskOn(MaskT,portA);
+                     printf (" el valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
+                }
+                else if (ltrQ(entrada)){
+
+                    loop=0;
+                    close_display=true;
+               }
+                else if (ltrB(entrada)){
+                    portAux=((*puertos).px.a);      //se guarda los bits del puerto A
+                    int fin=1;
+                    do{                             //ciclo  que me hace parpadaer lso bits
+                        MaskParpOff (portAux,MaskC);
+                        fillbits();
+                        al_flip_display();
+                        MaskParpOn (MaskC,portAux);
+                        fillbits();
+                        al_flip_display();
+                    }while(fin);
+                }
+
+            fillbits(); //Funcion que actualiza bits del display
+            al_flip_display();
         
-                 MaskOn(MaskT,portA);
-                 printf (" el valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
-            }
-            else if (ltrQ(entrada)){
-            
-                loop=0;
-                close_display=true;
-           }
-            else if (ltrB(entrada)){
-                portAux=((*puertos).px.a);      //se guarda los bits del puerto A
-                int fin=1;
-                do{                             //ciclo  que me hace parpadaer lso bits
-                    MaskParpOff (portAux,MaskC);
-                    fillbits();
-                    al_flip_display();
-                    MaskParpOn (MaskC,portAux);
-                    fillbits();
-                    al_flip_display();
-                }while(fin);
-            }
-            
-        fillbits(); //Funcion que actualiza bits del display
-        al_flip_display();
         
     }while(loop);
 
