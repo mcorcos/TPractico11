@@ -14,8 +14,8 @@
 #ifndef REGISTROS_H
 #define REGISTROS_H
 
-void bitSet (char ,int);
-void bitClr (char ,int);
+void bitSet (char ,int);	//prototipos de las funciones de la libreria
+void bitClr (char ,int);	//se utilizan para modificar los bits de un puerto
 int bitGet (char , int);
 void bitToggle (char ,int);
 void MaskOn (int ,char);
