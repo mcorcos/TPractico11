@@ -19,7 +19,7 @@
 #define Is_portB(i)  (((i)=='b')||((i)='B'))    
 #define numvalido(i)    ((i)>='0' && (i)<='7')  
 static registros_t portd;                   //se crea una variable de tipo registro_t que a su vez es una estructura
-
+registros_t *puertos= &portd;			// Puntero para poder ver los valores del puerto
 
 void bitSet (char port, int numbit){            //funcion que modifica un bits por 1,recibe un puerto y el numero de bit deseado
     if (Is_portA(port) && numvalido(numbit)){      //se diferencia entre el puerto A y el puerto B,para tener facilel acceso
@@ -80,21 +80,21 @@ int bitGet (char port,int numbit){                  //funcion que devuelve el es
     int state;
     if (Is_portA(port) && numvalido(numbit)){      //se diferencia entre el puerto A y el puerto B,para tener facilel acceso
             switch (numbit){                        //se devuelve el esatdo del bit deseado
-                case '0':portd.bi.a0=state;
+                case 0:state=portd.bi.a0;
                        return state;break;
-                case '1':portd.bi.a1=state;
+                case 1:state=portd.bi.a1;
                        return state;break;
-                case '2':portd.bi.a2=state;
+                case 2:state=portd.bi.a2;
                        return state;break;
-                case '3':portd.bi.a3=state;                        
+                case 3:state=portd.bi.a3;                        
                        return state;break;
-                case '4':portd.bi.a4=state;                 
+                case 4:state=portd.bi.a4;                 
                        return state;break;
-                case '5':portd.bi.a5=state;
+                case 5:state=portd.bi.a5;
                        return state;break;
-                case '6':portd.bi.a6=state;
+                case 6:state=portd.bi.a6;
                        return state;break;
-                case '7':portd.bi.a7=state;
+                case 7:state=portd.bi.a7;
                        return state;break;
 
             }
@@ -102,24 +102,25 @@ int bitGet (char port,int numbit){                  //funcion que devuelve el es
             
     else if (Is_portB(port)&& numvalido(numbit)){
          switch (numbit){
-                case '0':portd.bi.b0=state;
+                case '0':state=portd.bi.b0;
                        return state;break;
-                case '1':portd.bi.b1=state;
+                case '1':state=portd.bi.b1;
                        return state;break;
-                case '2':portd.bi.b2=state;
+                case '2':state=portd.bi.b2;
                        return state;break;
-                case '3':portd.bi.b3=state;
+                case '3':state=portd.bi.b3;
                        return state;break;
-                case '4':portd.bi.b4=state;
+                case '4':state=portd.bi.b4;
                        return state;break;
-                case '5':portd.bi.b5=state;
+                case '5':state=portd.bi.b5;
                        return state;break;
-                case '6':portd.bi.b6=state;
+                case '6':state=portd.bi.b6;
                        return state;break;
-                case '7':portd.bi.b7=state;
+                case '7':state=portd.bi.b7;
                        return state;break;
         }
      }  
+return state;
 }
 void bitToggle (char port, int numbit){ //funcion que utiliza otra funciones , porque cambia el el estado del bit por un 1 o un 0
     int state;
