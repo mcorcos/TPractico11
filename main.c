@@ -16,6 +16,9 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include "registros.h"
+#include <allegro5/allegro_primitives.h> 
+#include <allegro5/allegro_color.h>
+#include <allegro5/allegro5.h>
 
 #define HEIGHT 500
 #define WIDTH  800
@@ -26,7 +29,7 @@
 #define numvalido(i)    ((i)>='0' && (i)<='7')
 #define MaskT      0xFF//mascara que sirve para manipular los bits del puerto A
 #define MaskC      0x00
-void create_porta(int bits);
+void create_porta(void);
 /*
  * 
  */
@@ -38,7 +41,7 @@ int main() {
         fprintf (stderr, "error al inicializar el allegro\n");
         return 0;
     }
-    if (!al_init_image_addon()){
+    if (!al_init_primitives_addon()){
         fprintf (stderr, "error al inicializar las primitivas\n");
         return 0;
     }
@@ -46,7 +49,7 @@ int main() {
     display=al_create_display(800,500);
     
     if(!display){
-        al_shutdown_image_addon();      //se destruye la imagen porque ocupa espacio en heap y el programa fallo por otro motivo
+        al_shutdown_primitives_addon();      //se destruye la imagen porque ocupa espacio en heap y el programa fallo por otro motivo
         fprintf(stderr,"failed to create display");
         return 0;
     }
@@ -54,7 +57,7 @@ int main() {
     al_flip_display();
     al_map_rgb_f(255,255,255);
     
-    create_porta(8);
+    create_porta();
     
     
     
@@ -97,14 +100,17 @@ int main() {
     return (EXIT_SUCCESS);
 }
 
-void create_porta(int bits){
-    int i;
+void create_portax(void){
     
-    for(i=1;i<=bits;++i){
-        
-        float value= (WIDTH*i)/(i+1)
-        al_draw_circle( value , HEIGHT /2 , 40.0, al_color_name("black"),5);
-        
-    }
-    al_flip_display();
+    
+        al_draw_circle( WIDTH*1/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH*2/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH *3/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH *4/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH *5/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH *6/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH *7/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+        al_draw_circle( WIDTH *8/9 , HEIGHT /2 , 40.0, al_color_name("black"),5);
+     
+        al_flip_display();
 }
