@@ -98,10 +98,11 @@ int main() {
                 for(;cntinue;){
                     if(getchar()=='\n'){
                         cntinue=0;
-                        close_display=true;
+                        loop=0;
+                        close_display=1;
                     }
                 }
-                printf("caracter no valido\n2");
+                printf("caracter no valido\n");
             }
             else
                 if (numvalido(entrada)) {   
@@ -128,12 +129,12 @@ int main() {
                 else if (ltrQ(entrada)){
 
                     loop=0;
-                    close_display=true;
+                    close_display= true;
                }
                 else if (ltrB(entrada)){
                     portAux=((*puertos).px.a);      //se guarda los bits del puerto A
                     int fin=1;
-                    do{                             //ciclo  que me hace parpadaer lso bits
+                    do{                             //ciclo  que me hace parpadaer los bits
                         MaskParpOff (portAux,MaskC);
                         fillbits();
                         al_flip_display();
