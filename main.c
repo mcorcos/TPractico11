@@ -13,15 +13,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "registros.h"
+#include "termlib.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-#include "registros.h"
 #include <allegro5/allegro_primitives.h> 
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_audio.h>
-
 
 #define HEIGHT 500
 #define WIDTH  800
@@ -43,7 +43,8 @@ int main() {
     ALLEGRO_BITMAP *imagen=NULL;
     ALLEGRO_EVENT_QUEUE * event_queue =NULL;
     ALLEGRO_SAMPLE *sample=NULL;
-    int portAux,cntinue;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
+    
+    int portAux;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
     bool close_display = false;
     
     if (!al_init()){        //inicializacion general del allegro
@@ -68,13 +69,12 @@ int main() {
         return -1;
     }
    
-    sample= al_load_sample("sound81.wav");
-    
-       
+    sample= al_load_sample("beep-3.wav");
+
     if (!sample) {                         //se controla si fallo
         fprintf(stderr, "audio clip sample not loaded!\n");
         return -1;
-    }    
+    } 
     
     if (!event_queue) {                         //se controla si fallo
         fprintf(stderr, "failed to create event_queue!\n");
@@ -88,7 +88,7 @@ int main() {
     }
 
    
-    display=al_create_display(800,500);       //se crear el display
+    display=al_create_display(800,500);       //se crea el display
     al_register_event_source(event_queue, al_get_display_event_source(display));
     
     
@@ -112,7 +112,7 @@ int main() {
     
     while (!close_display) {                            
         
-        int entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
+        int cntinue,entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
     
         ALLEGRO_EVENT ev;
         if (al_get_next_event(event_queue, &ev)) //Toma un evento de la cola, VER RETURN EN DOCUMENT.
@@ -131,6 +131,8 @@ int main() {
             
             entrada=getchar ();
             
+            
+            
             if(getchar()!='\n'){
                 for(;cntinue;){
                     if(getchar()=='\n'){
@@ -141,7 +143,11 @@ int main() {
                 }
                 printf("caracter no valido\n");
             }
+            
             else{
+                
+                al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_ONCE,NULL);
+                
                 if (numvalido(entrada)) {   
 
                      bitSet(portA, entrada);
@@ -172,34 +178,31 @@ int main() {
                     portAux=((*puertos).px.a);      //se guarda los bits del puerto A
                     int fin=1;
                     do{                             //ciclo  que me hace parpadaer los bits
+                        while(!kbhit()){
                         MaskParpOff (portAux,MaskC);
                         fillbits();
                         al_flip_display();
                         MaskParpOn (MaskC,portAux);
                         fillbits();
-                        al_flip_display();
+                        al_flip_display();                               
+                        }
+                        if(ltrB(getchar())){
+                            fin=0;
+                        }
                     }while(fin);
+                }
+                else{
+                    loop=0;
+                    close_display=true;
                 }
 
             fillbits(); //Funcion que actualiza bits del display
             al_flip_display();
-            al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_ONCE,NULL);
             }
         
-    }while(loop);
-
-    
-    
-    
-    
-    
-    
-    
+        }while(loop);  
     }
-   
-    
-    
-    
+      
     al_destroy_bitmap(imagen);       //se libera la memoria dinamica , destruyendo los elemntos usados
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);

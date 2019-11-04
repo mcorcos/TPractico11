@@ -13,7 +13,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include "registros.h"
 #define Is_portA(i)  (((i)=='a')||((i)='A'))    //macros que sirven para validar los datos
 #define Is_portB(i)  (((i)=='b')||((i)='B'))    
