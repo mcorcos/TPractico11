@@ -19,6 +19,8 @@
 #include <allegro5/allegro_primitives.h> 
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro5.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_audio.h>
 
 
 #define HEIGHT 500
@@ -31,7 +33,7 @@
 #define numvalido(i)    ((i)>='0' && (i)<='7')
 #define MaskT      0xFF//mascara que sirve para manipular los bits del puerto A
 #define MaskC      0x00
- extern registros_t *puertos;
+extern registros_t *puertos;
 void create_portax(void);       //puerto A 
 /*
  * 
@@ -40,38 +42,73 @@ int main() {
     ALLEGRO_DISPLAY  *display=NULL;     //puntero que apunta a un estructura de allegro, se lo apunta al nulo para controlar errores
     ALLEGRO_BITMAP *imagen=NULL;
     ALLEGRO_EVENT_QUEUE * event_queue =NULL;
+    ALLEGRO_SAMPLE *sample=NULL;
     int portAux,cntinue;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
-    bool close_display = false; 
+    bool close_display = false;
     
     if (!al_init()){        //inicializacion general del allegro
         fprintf (stderr, "error al inicializar el allegro\n");
-        return 0;
+        return -1;
     }
+    
    event_queue = al_create_event_queue();       //se inicializa los eventos
+   
+    if (!al_install_audio()) {                         //se controla si fallo
+        fprintf(stderr, "failed to create audio!\n");
+        return -1;
+    }  
+ 
+    if (!al_init_acodec_addon()) {                         //se controla si fallo
+        fprintf(stderr, "failed to create audio codecs!\n");
+        return -1;
+    }
+
+    if (!al_reserve_samples(1)) {                         //se controla si fallo
+        fprintf(stderr, "failed to reserve samples!\n");
+        return -1;
+    }
+   
+    sample= al_load_sample("sound81.wav");
+    
+       
+    if (!sample) {                         //se controla si fallo
+        fprintf(stderr, "audio clip sample not loaded!\n");
+        return -1;
+    }    
+    
     if (!event_queue) {                         //se controla si fallo
         fprintf(stderr, "failed to create event_queue!\n");
         return -1;
     }
+   
+   
     if (!al_init_primitives_addon()){       //se controla si fallo la inicializacion de las primitivas
         fprintf (stderr, "error al inicializar las primitivas\n");
-        return 0;
+        return -1;
     }
 
+   
     display=al_create_display(800,500);       //se crear el display
     al_register_event_source(event_queue, al_get_display_event_source(display));
+    
     
     if(!display){
         al_shutdown_primitives_addon();      //se destruye la imagen porque ocupa espacio en heap y el programa fallo por otro motivo
         al_destroy_event_queue(event_queue);
         fprintf(stderr,"failed to create display");
         
-        return 0;
+        return -1;
     }
+    
+    
     al_clear_to_color(al_color_name("white"));          //se pinta las dos caras del display con blanco
     al_flip_display();
     al_clear_to_color(al_color_name("white"));
+   
     
-    create_portax();                                    //se crea el puerto A 
+    create_portax();  //se crea el puerto A 
+    
+    
     
     while (!close_display) {                            
         
@@ -104,7 +141,7 @@ int main() {
                 }
                 printf("caracter no valido\n");
             }
-            else
+            else{
                 if (numvalido(entrada)) {   
 
                      bitSet(portA, entrada);
@@ -146,7 +183,8 @@ int main() {
 
             fillbits(); //Funcion que actualiza bits del display
             al_flip_display();
-        
+            al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_ONCE,NULL);
+            }
         
     }while(loop);
 
@@ -162,10 +200,11 @@ int main() {
     
     
     
-       al_destroy_bitmap(imagen);       //se libera la memoria dinamica , destruyendo los elemntos usados
+    al_destroy_bitmap(imagen);       //se libera la memoria dinamica , destruyendo los elemntos usados
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
     al_shutdown_primitives_addon();
+    al_destroy_sample(sample);
     printf ("bye\n");
     
     
