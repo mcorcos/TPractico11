@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "registros.h"
 #include "termlib.h"
 #include <allegro5/allegro.h>
@@ -30,20 +31,20 @@
 #define ltrC(i) ((i)=='c' || (i)=='C')  //letra c me permite apagar todos los bits
 #define ltrS(i) ((i)=='s' || (i)=='S')  //letra s me permite prender todos los bits
 #define ltrB(i) ((i)=='b' || (i)=='B') //parpadeo de bits encendidos 
-#define numvalido(i)    ((i)>='0' && (i)<='7')
+#define numvalido(i)    ((i)>='0' && (i)<='7') // macro para identificar numeros de bit
 #define MaskT      0xFF//mascara que sirve para manipular los bits del puerto A
 #define MaskC      0x00
-extern registros_t *puertos;
+
+extern registros_t *puertos; //defino registros
 void create_portax(void);       //puerto A 
 /*
  * 
  */
 int main() {
-    ALLEGRO_DISPLAY  *display=NULL;     //puntero que apunta a un estructura de allegro, se lo apunta al nulo para controlar errores
+    ALLEGRO_DISPLAY  *display=NULL;     //punteros que apuntan a un estructuras de allegro, se los apuntan a NULL para controlar errores
     ALLEGRO_BITMAP *imagen=NULL;
     ALLEGRO_EVENT_QUEUE * event_queue =NULL;
     ALLEGRO_SAMPLE *sample=NULL;
-    
     int portAux;        //puerto que me guarda la configuracion actual del puerto para hacerlo parpadear
     bool close_display = false;
     
@@ -52,31 +53,32 @@ int main() {
         return -1;
     }
     
-   event_queue = al_create_event_queue();       //se inicializa los eventos
    
-    if (!al_install_audio()) {                         //se controla si fallo
+    if (!al_install_audio()) {                         //se controla si fallo el audio
         fprintf(stderr, "failed to create audio!\n");
         return -1;
     }  
  
-    if (!al_init_acodec_addon()) {                         //se controla si fallo
+    if (!al_init_acodec_addon()) {                         //se controla si fallo el audio codec
         fprintf(stderr, "failed to create audio codecs!\n");
         return -1;
     }
 
-    if (!al_reserve_samples(1)) {                         //se controla si fallo
+    if (!al_reserve_samples(1)) {                         //se controla si existio falla
         fprintf(stderr, "failed to reserve samples!\n");
         return -1;
     }
    
-    sample= al_load_sample("beep-3.wav");
+    sample = al_load_sample("beep-3.wav");  //cargo el sample
 
-    if (!sample) {                         //se controla si fallo
+    if (!sample) {                         //se controla si fallo cargar el sample
         fprintf(stderr, "audio clip sample not loaded!\n");
         return -1;
     } 
     
-    if (!event_queue) {                         //se controla si fallo
+    event_queue = al_create_event_queue();       //se inicializa los eventos
+    
+    if (!event_queue) {                         //se controla si fallo la init de los eventos
         fprintf(stderr, "failed to create event_queue!\n");
         return -1;
     }
@@ -89,8 +91,7 @@ int main() {
 
    
     display=al_create_display(800,500);       //se crea el display
-    al_register_event_source(event_queue, al_get_display_event_source(display));
-    
+    al_register_event_source(event_queue, al_get_display_event_source(display)); //se registra la fuente de los eventos de cierre de display
     
     if(!display){
         al_shutdown_primitives_addon();      //se destruye la imagen porque ocupa espacio en heap y el programa fallo por otro motivo
@@ -112,14 +113,15 @@ int main() {
     
     while (!close_display) {                            
         
-        int cntinue,entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
+        int entrada,loop=1;    //entrada es una variable que me permite almacenar el dato aportado por el usuario, loop, me permite permanecer en el ciclo
     
-        ALLEGRO_EVENT ev;
-        if (al_get_next_event(event_queue, &ev)) //Toma un evento de la cola, VER RETURN EN DOCUMENT.
+        ALLEGRO_EVENT ev;   //se crea la estructura ev
+        if (al_get_next_event(event_queue, &ev)) //Toma un evento de la cola
         {
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                close_display = true;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){    
+                close_display =true;
                 loop=0;
+            }
         }
     
     
@@ -127,58 +129,55 @@ int main() {
         char portA='A';     //solo se desea modificar el puerto A
         printf ("Ingrese numero de bit o letra correspondiente\n");
         
-        do{
+        while(loop && !close_display){
             
-            entrada=getchar ();
+            entrada=getchar (); // recibo un comando o bit
             
             
             
-            if(getchar()!='\n'){
-                for(;cntinue;){
-                    if(getchar()=='\n'){
-                        cntinue=0;
-                        loop=0;
-                        close_display=true;
-                    }
-                }
+            if(getchar()!='\n'){    //si hubo error en la entrada de datos se limpia el buffer
+                fflush(stdin);
+                getchar();
                 printf("caracter no valido\n");
             }
-            
             else{
                 
-                al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_ONCE,NULL);
+                al_play_sample(sample,1,0,1,ALLEGRO_PLAYMODE_ONCE,NULL);    // suena un ruido cuando se llena un bit
                 
-                if (numvalido(entrada)) {   
+                if (numvalido(entrada)) {   // si se ingreso un numero de bit lo prendo
 
                      bitSet(portA, entrada);
-
+                     loop=0;
                       printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
                 }
-                 else if (ltrT(entrada)){
+                else if (ltrT(entrada)){   // si ingreso la T cambio por el opuesto todos los bits
 
                      MaskToggle(MaskT,portA);
+                     loop=0;
                      printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
                  }
-                 else if (ltrC(entrada)){
+                else if (ltrC(entrada)){   //si recibo la letra C hago un clear a los bits
 
                      MaskOff(MaskC,portA);
+                     loop=0;
                      printf (" El valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
                 }
-                 else if (ltrS(entrada)){
+                else if (ltrS(entrada)){   // si recibo la letra S prendo todoso los leds
 
                      MaskOn(MaskT,portA);
+                     loop=0;
                      printf (" el valor del puerto A es: 0x%hhx\n", (*puertos).px.a);
                 }
-                else if (ltrQ(entrada)){
+                else if (ltrQ(entrada)){    //si recibo la Q el programa termina
 
                     loop=0;
-                    close_display= true;
+                    close_display= true;    
                }
                 else if (ltrB(entrada)){
                     portAux=((*puertos).px.a);      //se guarda los bits del puerto A
                     int fin=1;
                     do{                             //ciclo  que me hace parpadaer los bits
-                        while(!kbhit()){
+                        while(!kbhit()){            //cuando se detecta una letra apretada en el teclado sale del ciclo.
                         MaskParpOff (portAux,MaskC);
                         fillbits();
                         al_flip_display();
@@ -186,12 +185,15 @@ int main() {
                         fillbits();
                         al_flip_display();                               
                         }
-                        if(ltrB(getchar())){
+                        if(ltrB(getchar())){        // chequeo si es una B para cerrar el ciclo
                             fin=0;
+                            fflush(stdin);          //vacio el buffer de entrada
+                            getchar();
                         }
+                        loop=0;
                     }while(fin);
                 }
-                else{
+                else{   // sso fue un caracter no valido me voy del programa
                     loop=0;
                     close_display=true;
                 }
@@ -200,7 +202,7 @@ int main() {
             al_flip_display();
             }
         
-        }while(loop);  
+        } 
     }
       
     al_destroy_bitmap(imagen);       //se libera la memoria dinamica , destruyendo los elemntos usados
@@ -208,6 +210,7 @@ int main() {
     al_destroy_event_queue(event_queue);
     al_shutdown_primitives_addon();
     al_destroy_sample(sample);
+    al_uninstall_audio();
     printf ("bye\n");
     
     

@@ -76,7 +76,7 @@ void bitClr (char port,int numbit){             //funcion que modifica un bit po
      }   
 }
 int bitGet (char port,int numbit){                  //funcion que devuelve el estado del bit
-    int state;
+    int state=0;
     if (Is_portA(port) && numvalido(numbit)){      //se diferencia entre el puerto A y el puerto B,para tener facilel acceso
             switch (numbit){                        //se devuelve el esatdo del bit deseado
                 case 0:state=portd.bi.a0;
